@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import {
   firebaseConnect,
@@ -18,13 +19,14 @@ import FontIcon from 'react-md/lib/FontIcons'
 
 //  Top-Level UI (Navigation, wrappers, etc)
 import './main.scss'
-// @connect(state => ({ screen: state.screen }))
-@firebaseConnect()
-@connect(
-  ({ firebase }) => ({
-    auth: pathToJS(firebase, 'auth'),
-    authError: pathToJS(firebase, 'authError')
-  })
+@compose(
+  firebaseConnect(),
+  connect(
+    ({ firebase }) => ({
+      auth: pathToJS(firebase, 'auth'),
+      authError: pathToJS(firebase, 'authError')
+    })
+  )
 )
 class UI extends React.Component {
   handleLogin = () => {

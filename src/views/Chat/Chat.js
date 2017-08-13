@@ -8,21 +8,14 @@ import {
   isLoaded,
   isEmpty
 } from 'react-redux-firebase'
+import { UserIsAuthenticated } from '../../services/auth'
 
 import Card from 'react-md/lib/Cards/Card'
 import CardText from 'react-md/lib/Cards/CardText'
-import { UserIsAuthenticated } from '../../services/auth'
-// @UserIsAuthenticated
-// @firebaseConnect()
-// // @connect((state, props) => ({ TEST: state.firebase }))
-// @connect(({ firebase }) => ({
-//     todos: dataToJS(firebase, 'rooms')
-//   })
-// )
-// @connect((state, props) => ({ id: props.params.room }))
+
+//  Require auth. Connect to a room based on URL params.
 @compose(
   UserIsAuthenticated,
-  // firebaseConnect(['rooms']),
   firebaseConnect(props => [`rooms/${props.params.room}`]),
   connect(({ firebase }, props) => ({
     key: props.params.room,
