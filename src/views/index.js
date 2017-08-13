@@ -11,6 +11,8 @@ import {
 import { Link } from 'react-router'
 
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
+import ListItem from 'react-md/lib/Lists/ListItem'
+import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 import FontIcon from 'react-md/lib/FontIcons'
 
@@ -18,49 +20,47 @@ import FontIcon from 'react-md/lib/FontIcons'
 import './main.scss'
 // @connect(state => ({ screen: state.screen }))
 @firebaseConnect()
-@connect(({ firebase }) => ({ authError: pathToJS(firebase, 'authError') }))
-// @connect(state => ({ authError: state.firebase.authError }))
+@connect(
+  ({ firebase }) => ({
+    auth: pathToJS(firebase, 'auth'),
+    authError: pathToJS(firebase, 'authError')
+  })
+)
 class UI extends React.Component {
-  constructor (props) {
-    super(props)
-    const navItems = [
-      { primaryText: 'Home',
-        secondaryText: 'Main Page',
-        leftIcon: <FontIcon>home</FontIcon>,
-        component: Link,
-        to: '/'
-      }, {
-        primaryText: 'Demo Page',
-        secondaryText: 'Typography Demo',
-        leftIcon: <FontIcon>school</FontIcon>,
-        component: Link,
-        to: '/demo'
-      }, { divider: true }
-    ]
-
-    const links = [{
-      label: 'GitHub',
-      url: 'https://github.com/RcKeller/',
-      iconClassName: 'fa fa-github'
-    }]
-    this.state = { navItems, links }
-  }
   handleLogin = () => {
     const { firebase } = this.props
-    const loginData = { provider: 'google' }
-    return firebase.login(loginData)
+    return firebase.login({ provider: 'google' })
   }
   render (
-    { children } = this.props,
-    { title, navItems, links } = this.state
+    { children, auth } = this.props
   ) {
-    // console.warn(this.props.screen)
     return (
       <NavigationDrawer autoclose
         mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
         tabletDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
         desktopDrawerType={NavigationDrawer.DrawerTypes.CLIPPED}
-        navItems={navItems}
+        navItems={[{
+          primaryText: auth ? auth.displayName : 'You are not Logged In',
+          secondaryText: auth ? auth.email : 'Click to sign in',
+          leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
+          onClick: this.handleLogin
+        }, {
+          divider: true
+        }, {
+          primaryText: 'Home',
+          secondaryText: 'Main Page',
+          leftIcon: <FontIcon>home</FontIcon>,
+          component: Link,
+          to: '/'
+        }, {
+          primaryText: 'Demo Page',
+          secondaryText: 'Typography Demo',
+          leftIcon: <FontIcon>school</FontIcon>,
+          component: Link,
+          to: '/demo'
+        }, {
+          divider: true
+        }]}
         drawerTitle='Navigation'
         toolbarTitle={
           <Link to='/' className='toolbar-title'>
@@ -69,15 +69,10 @@ class UI extends React.Component {
           </Link>
         }
         toolbarActions={
-          <div>
-            <Button key='login' secondary onClick={this.handleLogin}>LOGIN</Button>
-            {links.map(link =>
-              <Button key={link.label} secondary icon
-                iconClassName={link.iconClassName}
-                href={link.url}
-              />
-            )}
-          </div>
+          <Button key='github' secondary icon
+            iconClassName='fa fa-github'
+            href='https://github.com/RcKeller/'
+          />
         }
       >
         <div>{children}</div>

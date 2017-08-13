@@ -46,6 +46,17 @@ header {
   }
 }
 
+//  Navbar
+nav {
+  //  Removing inconsistent margins from <hr /> elements
+  .md-list {
+    padding: 0;
+    .md-divider, hr {
+      margin: 0;
+    }
+  }
+}
+
 //  Core app
 main {
   //  Flexbox enables sticky footers, centering, etc
