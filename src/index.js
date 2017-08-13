@@ -11,6 +11,7 @@ import UI from './views'
 //  PAGES
 import Home from './views/Home/Home'
 import NotFound from './views/NotFound/NotFound'
+import Chat from './views/Chat/Chat'
 
  // RENDER ROOT
  // Update and add new routes as necessary
@@ -19,6 +20,7 @@ ReactDOM.render(
     <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
       <Route path='/' component={UI}>
         <IndexRoute component={Home} />
+        <Route path='chat/:room' component={Chat} />
         <Route path='*' component={NotFound} />
       </Route>
     </Router>

@@ -31,6 +31,11 @@ class UI extends React.Component {
     const { firebase } = this.props
     return firebase.login({ provider: 'google' })
   }
+  handleLogout = () => {
+    const { firebase, router } = this.props
+    firebase.logout()
+    router.push('/')
+  }
   render (
     { children, auth } = this.props
   ) {
@@ -40,13 +45,6 @@ class UI extends React.Component {
         tabletDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
         desktopDrawerType={NavigationDrawer.DrawerTypes.CLIPPED}
         navItems={[{
-          primaryText: auth ? auth.displayName : 'You are not Logged In',
-          secondaryText: auth ? auth.email : 'Click to sign in',
-          leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
-          onClick: this.handleLogin
-        }, {
-          divider: true
-        }, {
           primaryText: 'Home',
           secondaryText: 'Main Page',
           leftIcon: <FontIcon>home</FontIcon>,
@@ -58,6 +56,13 @@ class UI extends React.Component {
           leftIcon: <FontIcon>school</FontIcon>,
           component: Link,
           to: '/demo'
+        }, {
+          divider: true
+        }, {
+          primaryText: auth ? auth.displayName : 'You are not Logged In',
+          secondaryText: auth ? auth.email : 'Click to sign in',
+          leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
+          onClick: auth ? this.handleLogout : this.handleLogin
         }, {
           divider: true
         }]}
