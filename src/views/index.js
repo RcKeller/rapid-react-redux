@@ -72,7 +72,7 @@ class UI extends React.Component {
         toolbarTitle={
           <Link to='/' className='toolbar-title'>
             <img src='/img/logo.svg' alt='Site Logo' />
-            <h2>{`Site Title`}</h2>
+            <h2>Crypto Chat</h2>
           </Link>
         }
         toolbarActions={
