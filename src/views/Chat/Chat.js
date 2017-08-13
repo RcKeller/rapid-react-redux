@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import {
   firebaseConnect,
   pathToJS,
+  dataToJS,
   isLoaded,
   isEmpty
 } from 'react-redux-firebase'
@@ -23,14 +24,9 @@ import { UserIsAuthenticated } from '../../services/auth'
   UserIsAuthenticated,
   // firebaseConnect(['rooms']),
   firebaseConnect(props => [`rooms/${props.params.room}`]),
-  // connect((state, props) => ({ id: props.firebase.data }))
-  // connect(({ firebase }, props) => ({
-  //   // room: orderedToJS(firebase, 'rooms'),
-  // }))
-  // connect((state, props) => ({ id: props.params.room }))
-  // @connect(({ firebase }, props) => ({
   connect(({ firebase }, props) => ({
-    room: pathToJS(firebase, `rooms/${props.params.room}`),
+    key: props.params.room,
+    room: dataToJS(firebase, `rooms/${props.params.room}`)
   }))
 )
 class Chat extends React.Component {
