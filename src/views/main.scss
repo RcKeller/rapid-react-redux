@@ -1,0 +1,86 @@
+// Font and icon CDNs (Roboto, Material Icons and Font-Awesome)
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+/*
+React-MD (mlaursen) Theme:
+https://react-md.mlaursen.com/customization/themes?tab=1
+Import core styles, override variables, and then include everything to reference said overrides.
+*/
+@import '~react-md/src/scss/react-md';
+$md-primary-color: $md-light-blue-500;
+$md-secondary-color: $md-deep-orange-a-200;
+@include react-md-everything;
+
+// Basic normalization, non-aggressive
+* {
+    box-sizing: border-box;
+}
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+}
+//  Because why underline links? Affects react-router links as well.
+a:link {
+  color: $md-secondary-color;
+  text-decoration: none;
+}
+
+//  Header
+header {
+  .toolbar-title {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    img {
+      margin: 0 8px;
+      max-height: 94%;
+      max-width: 94%;
+    }
+    h2 {
+      margin:  0;
+      color: inherit;
+    }
+  }
+}
+
+//  Core app
+main {
+  //  Flexbox enables sticky footers, centering, etc
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  //  Page content ("children" in index.js)
+  div {
+    // flex: 1; is sufficient, but not for IE
+    flex: 1 0 auto;
+    min-height: 300px;
+    //  Articles, use semantic-html in page components to apply responsive margins.
+    article {
+      margin: 16px 4px;
+      @media (min-width: 768px) {
+          margin: 32px 8px;
+      }
+    }
+  }
+
+  //  Sticky Footer
+  footer {
+    display: flex;
+    //  Opinionated defaults
+    justify-content: center;
+    align-items: center;
+    min-height: 64px;
+    max-width: 100%;
+    padding: 8px;
+    background-color: #424242;
+    h3 {
+      margin: 0;
+      color: white;
+    }
+  }
+
+}
