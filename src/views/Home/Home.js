@@ -2,7 +2,9 @@ import React from 'react'
 
 import Card from 'react-md/lib/Cards/Card'
 import CardText from 'react-md/lib/Cards/CardText'
+import { UserIsAuthenticated } from '../../services/auth'
 
+@UserIsAuthenticated
 class Home extends React.Component {
   render () {
     return (

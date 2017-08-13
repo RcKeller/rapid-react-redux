@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import { responsiveStoreEnhancer } from 'redux-responsive'
 import { reactReduxFirebase } from 'react-redux-firebase'
-import firebase from './firebase'
+import config, { keys } from './firebase'
 import { createLogger } from 'redux-logger'
 import { reducers } from './reducers.js'
 
@@ -32,19 +32,10 @@ const store = createStore(
   reducers,
   compose(
     responsiveStoreEnhancer,
-    reactReduxFirebase(firebase, { userProfile: 'users', enableLogging: false }),
+    reactReduxFirebase(keys, config),
     middleware
   )
 )
 const history = syncHistoryWithStore(browserHistory, store)
 
 export { store, history }
-
-
-// // Add redux Firebase to compose
-// const createStoreWithFirebase = compose(
-//   reactReduxFirebase(config, { userProfile: 'users' }),
-// )(createStore)
-//
-// // Create store with reducers and initial state
-// const store = createStoreWithFirebase(rootReducer, initialState)
