@@ -26,8 +26,7 @@ class UI extends React.Component {
         leftIcon: <FontIcon>school</FontIcon>,
         component: Link,
         to: '/demo'
-      },
-      { divider: true }
+      }, { divider: true }
     ]
 
     const links = [{
