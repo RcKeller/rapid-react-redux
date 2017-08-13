@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
-import { reducer as form } from 'redux-form'
 import {responsiveStateReducer as screen} from 'redux-responsive'
+import { reducer as form } from 'redux-form'
+import { firebaseStateReducer as firebase } from 'react-redux-firebase'
 
-// main reducers
 export const reducers = combineReducers({
   routing,
+  screen,
   form,
-  screen
-  // your reducer here
+  firebase
+  // your reducers here
 })
