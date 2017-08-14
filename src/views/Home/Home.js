@@ -23,7 +23,10 @@ import Button from 'react-md/lib/Buttons'
 )
 class Home extends React.Component {
   static propTypes = {
-    user: PropTypes.object
+    user: PropTypes.shape({
+      uid: PropTypes.string
+    }),
+    handleAddRoom: PropTypes.func.isRequired
   }
   render (
     { user, handleAddRoom } = this.props

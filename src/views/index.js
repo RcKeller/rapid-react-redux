@@ -9,12 +9,12 @@ import { dismissToast } from '../services/toasts'
 import { Link } from 'react-router'
 
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
-const { TEMPORARY, CLIPPED } = NavigationDrawer.DrawerTypes
 import ListItem from 'react-md/lib/Lists/ListItem'
 import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 import FontIcon from 'react-md/lib/FontIcons'
 import Snackbar from 'react-md/lib/Snackbars'
+const { TEMPORARY, CLIPPED } = NavigationDrawer.DrawerTypes
 
 //  Top-Level UI (Navigation, wrappers, etc)
 import './main.scss'
@@ -30,6 +30,22 @@ import './main.scss'
   )
 )
 class UI extends React.Component {
+  static propTypes = {
+    firebase: PropTypes.shape({
+      login: PropTypes.func.isRequired,
+      logout: PropTypes.func.isRequired
+    }),
+    user: PropTypes.shape({
+      displayName: PropTypes.string,
+      email: PropTypes.string,
+      photoURL: PropTypes.string
+    }),
+    errors: PropTypes.array,
+    toasts: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      action: PropTypes.string
+    }))
+  }
   handleLogin = () => {
     const { firebase } = this.props
     firebase.login({ provider: 'google' })
