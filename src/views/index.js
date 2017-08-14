@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
+import { authenticated } from '../services/auth'
 
 import { Link } from 'react-router'
 
@@ -17,8 +18,8 @@ import './main.scss'
 @compose(
   firebaseConnect(),
   connect(state => ({
-    auth: !state.firebase.auth.isEmpty,
-    profile: state.firebase.profile,
+    auth: authenticated(state),
+    user: state.firebase.auth,
     errors: state.firebase.errors
   }))
 )
@@ -33,8 +34,14 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    { children, auth, profile } = this.props
+    { children, auth, user } = this.props
   ) {
+    const NavProfile = {
+      primaryText: auth ? user.displayName : 'You are not Logged In',
+      secondaryText: auth ? user.email : 'Click to sign in',
+      leftAvatar: auth ? <Avatar src={user.photoURL} role='presentation' /> : null,
+      onClick: auth ? this.handleLogout : this.handleLogin
+    }
     return (
       <NavigationDrawer autoclose
         mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
@@ -54,12 +61,15 @@ class UI extends React.Component {
           to: '/demo'
         }, {
           divider: true
-        }, {
-          primaryText: (auth ? profile.displayName : 'You are not Logged In'),
-          secondaryText: (auth ? profile.email : 'Click to sign in'),
-          leftAvatar: (auth ? <Avatar src={profile.avatarUrl} role='presentation' /> : null),
-          onClick: (auth ? this.handleLogout : this.handleLogin)
-        }, {
+        },
+        NavProfile,
+        // {
+        //   primaryText: (auth ? profile.displayName : 'You are not Logged In'),
+        //   secondaryText: (auth ? profile.email : 'Click to sign in'),
+        //   leftAvatar: (auth ? <Avatar src={profile.avatarUrl} role='presentation' /> : null),
+        //   onClick: (auth ? this.handleLogout : this.handleLogin)
+        // },
+        {
           divider: true
         }]}
         drawerTitle='Navigation'

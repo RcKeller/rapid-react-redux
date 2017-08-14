@@ -3,7 +3,6 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { UserIsAuthenticated } from '../../services/auth'
-// const uuidv4 = require('uuid/v4')
 
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
@@ -19,19 +18,18 @@ import Button from 'react-md/lib/Buttons'
 )
 class Home extends React.Component {
   handleAddRoom = () => {
-    // const { firebase, auth, router } = this.props
-    // if (auth) {
-    //   //  FIXME: Redirecting by pre-genned ID's still doesn't work since FB makes the first and only prop of said UUID a hash
-    //   const id = uuidv4()
-    //   let room = { owner: auth.uid, messages: [] }
-    //   firebase.pushWithMeta(`/rooms/${id}`, room)
-    //   .then(() => router.push(`/chat/${id}`))
-    //   .catch((err) => {
-    //     console.log('Error creating room:', err)
-    //   })
-    // } else {
-    //   console.warn('Cannot create rooms as anonymous.')
-    // }
+    const { firebase, auth, router } = this.props
+    if (auth) {
+      let room = { owner: auth.uid, messages: [] }
+      firebase.pushWithMeta('/rooms', room)
+      //  FIXME: The API has an onComplete param, but doesn't have a standard promise interface?
+      .then(() => console.log('Successfully created room', room))
+      .catch((err) => {
+        console.log('Error creating room:', err)
+      })
+    } else {
+      console.warn('Cannot create rooms as anonymous.')
+    }
 }
   render () {
     return (
