@@ -1,37 +1,30 @@
-import { browserHistory } from 'react-router'
-import { UserAuthWrapper } from 'redux-auth-wrapper'
+import locationHelperBuilder from 'redux-auth-wrapper/history3/locationHelper'
+import { connectedRouterRedirect } from 'redux-auth-wrapper/history3/redirect'
+import { routerActions } from 'react-router-redux'
+const home = '/'
 
-const UserIsAuthenticated = UserAuthWrapper({
-  wrapperDisplayName: 'UserIsAuthenticated',
-  authSelector: (state => state.firebase.auth),
-  authenticatingSelector: (state => {
-    state.firebase.isInitializing === true ||
-    state.firebase.auth === undefined
-  }),
-  predicate: (auth => auth !== null),
-  redirectAction: (newLoc) => (dispatch) => {
-    browserHistory.replace(newLoc)
-    // routerActions.replace // if using react-router-redux
-    dispatch({
-      type: 'UNAUTHED_REDIRECT',
-      payload: { message: 'You must be authenticated.' }
-    })
-  }
+//  SELECTORS
+export const authenticated = (state) => state.firebase.auth.isLoaded && !state.firebase.auth.isEmpty
+//  Loading: Firebase is initializing or auth hasn't loaded.
+export const authenticating = (state) => state.firebase.isInitializing || !state.firebase.auth.isLoaded
+export const unauthenticated = (state) => !state.firebase.auth.isLoaded || state.firebase.auth.isEmpty
+
+//  AUTH REDIRECTION DECORATORS
+//  https://github.com/mjrussell/redux-auth-wrapper/blob/master/examples/react-router-3/auth.js
+export const UserIsAuthenticated = connectedRouterRedirect({
+  redirectPath: home,
+  authenticatedSelector: authenticated,
+  authenticatingSelector: authenticating,
+  redirectAction: routerActions.replace,
+  wrapperDisplayName: 'UserIsAuthenticated'
 })
 
-const UserIsNotAuthenticated = UserAuthWrapper({
-  wrapperDisplayName: 'UserIsNotAuthenticated',
+export const UserIsNotAuthenticated = connectedRouterRedirect({
+  // redirectPath: ((state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/'),
+  redirectPath: home,
   allowRedirectBack: false,
-  failureRedirectPath: '/',
-  authSelector: (state => state.firebase.auth),
-  authenticatingSelector: (state => state.firebase.isInitializing === true),
-  predicate: auth => auth === null,
-  redirectAction: (newLoc) => (dispatch) => {
-    browserHistory.replace(newLoc)
-    dispatch({
-      type: 'AUTHED_REDIRECT',
-      payload: { message: 'User is authenticated. Redirecting home...' }
-    })
-  }
+  //  Redirect users who ARE authenticated
+  authenticatedSelector: unauthenticated,
+  redirectAction: routerActions.replace,
+  wrapperDisplayName: 'UserIsNotAuthenticated'
 })
-export { UserIsAuthenticated, UserIsNotAuthenticated }

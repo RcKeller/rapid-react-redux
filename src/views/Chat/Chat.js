@@ -19,7 +19,6 @@ import CardText from 'react-md/lib/Cards/CardText'
 )
 class Chat extends React.Component {
   render ({ id, room } = this.props) {
-    console.warn(room)
     return (
       <article id={id}>
         <Card className='md-grid md-cell--8'>
