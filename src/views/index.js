@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose } from 'redux'
+import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { authenticated } from '../services/auth'
+import { dismissToast } from '../services/toast'
 
 import { Link } from 'react-router'
 
@@ -12,16 +13,21 @@ import ListItem from 'react-md/lib/Lists/ListItem'
 import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 import FontIcon from 'react-md/lib/FontIcons'
+import Snackbar from 'react-md/lib/Snackbars'
 
 //  Top-Level UI (Navigation, wrappers, etc)
 import './main.scss'
 @compose(
   firebaseConnect(),
-  connect(state => ({
-    auth: authenticated(state),
-    user: state.firebase.auth,
-    errors: state.firebase.errors
-  }))
+  connect(
+    state => ({
+      auth: authenticated(state),
+      user: state.firebase.auth,
+      errors: state.firebase.errors,
+      toasts: state.toasts
+    }),
+    dispatch => ({ handleDismiss: bindActionCreators(dismissToast, dispatch) })
+  )
 )
 class UI extends React.Component {
   handleLogin = () => {
@@ -34,7 +40,7 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    { children, auth, user } = this.props
+    { children, auth, user, toasts, handleDismiss } = this.props
   ) {
     const NavProfile = {
       primaryText: auth ? user.displayName : 'You are not Logged In',
@@ -87,6 +93,9 @@ class UI extends React.Component {
         }
       >
         <div>{children}</div>
+        <Snackbar toasts={toasts} autohide
+          onDismiss={handleDismiss}
+        />
         <footer>
           <h3><em>Built by hackers, for hackers. We are Open-Source</em></h3>
         </footer>
