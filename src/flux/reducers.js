@@ -5,7 +5,8 @@ import {responsiveStateReducer as screen} from 'redux-responsive'
 import { reducer as form } from 'redux-form'
 import { firebaseStateReducer as firebase } from 'react-redux-firebase'
 //  Your reducers
-import toasts from '../services/toast'
+import toasts from '../services/toasts'
+import rooms from '../services/rooms'
 
 export const reducers = combineReducers({
   //  Core reducers - removal is a breaking change
@@ -14,5 +15,6 @@ export const reducers = combineReducers({
   form,
   firebase,
   //  Toasts - User-friendly notifications (events, errors, etc).
-  toasts
+  toasts,
+  rooms
 })

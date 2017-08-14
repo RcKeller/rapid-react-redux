@@ -23,9 +23,7 @@ class Chat extends React.Component {
       <article id={id}>
         <Card className='md-grid md-cell--8'>
           <CardText>
-            <p className='md-body-1'>
               Chat page:
-            </p>
           </CardText>
         </Card>
       </article>

@@ -4,11 +4,12 @@ import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { authenticated } from '../services/auth'
-import { dismissToast } from '../services/toast'
+import { dismissToast } from '../services/toasts'
 
 import { Link } from 'react-router'
 
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
+const { TEMPORARY, CLIPPED } = NavigationDrawer.DrawerTypes
 import ListItem from 'react-md/lib/Lists/ListItem'
 import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
@@ -21,8 +22,7 @@ import './main.scss'
   firebaseConnect(),
   connect(
     state => ({
-      auth: authenticated(state),
-      user: state.firebase.auth,
+      user:  authenticated(state) && state.firebase.auth,
       errors: state.firebase.errors,
       toasts: state.toasts
     }),
@@ -40,19 +40,13 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    { children, auth, user, toasts, handleDismiss } = this.props
+    { children, user, toasts, handleDismiss } = this.props
   ) {
-    const NavProfile = {
-      primaryText: auth ? user.displayName : 'You are not Logged In',
-      secondaryText: auth ? user.email : 'Click to sign in',
-      leftAvatar: auth ? <Avatar src={user.photoURL} role='presentation' /> : null,
-      onClick: auth ? this.handleLogout : this.handleLogin
-    }
     return (
       <NavigationDrawer autoclose
-        mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
-        tabletDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
-        desktopDrawerType={NavigationDrawer.DrawerTypes.CLIPPED}
+        mobileDrawerType={TEMPORARY}
+        tabletDrawerType={TEMPORARY}
+        desktopDrawerType={CLIPPED}
         navItems={[{
           primaryText: 'Home',
           secondaryText: 'Main Page',
@@ -67,15 +61,12 @@ class UI extends React.Component {
           to: '/demo'
         }, {
           divider: true
-        },
-        NavProfile,
-        // {
-        //   primaryText: (auth ? profile.displayName : 'You are not Logged In'),
-        //   secondaryText: (auth ? profile.email : 'Click to sign in'),
-        //   leftAvatar: (auth ? <Avatar src={profile.avatarUrl} role='presentation' /> : null),
-        //   onClick: (auth ? this.handleLogout : this.handleLogin)
-        // },
-        {
+        },{
+          primaryText: user ? user.displayName : 'You are not Logged In',
+          secondaryText: user ? user.email : 'Click to sign in',
+          leftAvatar: user ? <Avatar src={user.photoURL} role='presentation' /> : null,
+          onClick: user ? this.handleLogout : this.handleLogin
+        }, {
           divider: true
         }]}
         drawerTitle='Navigation'

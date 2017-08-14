@@ -4,7 +4,7 @@ import freeze from 'redux-freeze'
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import { responsiveStoreEnhancer } from 'redux-responsive'
-import { reactReduxFirebase } from 'react-redux-firebase'
+import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'
 import { keys, config } from './firebase'
 import * as firebase from 'firebase'
 import { createLogger } from 'redux-logger'
@@ -16,7 +16,8 @@ firebase.initializeApp(keys)
 
 //  Core middleware
 let middlewares = [
-  thunk,
+  //  Connect firebase to thunk middleware
+  thunk.withExtraArgument(getFirebase),
   routerMiddleware(browserHistory)
 ]
 //  Dev-only middlewares

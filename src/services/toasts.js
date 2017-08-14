@@ -8,16 +8,13 @@ https://medium.com/front-end-hacking/structuring-react-and-redux-applications-25
 /* *****
 ACTIONS
 ***** */
-// export const addToast = text => {
-//   return { type: 'ADD_TOAST', text }
-// }
 export const addToast = text => ({ type: 'ADD_TOAST', text })
 export const dismissToast = () => ({ type: 'DISMISS_TOAST' })
 
 /* *****
-REDUCERS
+REDUCER
 ***** */
-function reducer (state = [], action) {
+export default function reducer (state = [], action) {
   switch (action.type) {
     case 'ADD_TOAST':
       // FYI reg. namespaces, [Action] is the react-md label for the close button.
@@ -28,4 +25,3 @@ function reducer (state = [], action) {
     default: return state
   }
 }
-export default reducer
