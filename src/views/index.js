@@ -17,20 +17,15 @@ import './main.scss'
 @compose(
   firebaseConnect(),
   connect(state => ({
-    auth: state.firebase.auth,
+    auth: !state.firebase.auth.isEmpty,
+    profile: state.firebase.profile,
     errors: state.firebase.errors
   }))
-  // connect(
-  //   ({ firebase }) => ({
-  //     auth: pathToJS(firebase, 'auth'),
-  //     authError: pathToJS(firebase, 'authError')
-  //   })
-  // )
 )
 class UI extends React.Component {
   handleLogin = () => {
     const { firebase } = this.props
-    return firebase.login({ provider: 'google' })
+    firebase.login({ provider: 'google' })
   }
   handleLogout = () => {
     const { firebase, router } = this.props
@@ -38,8 +33,7 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    // { children, auth } = this.props
-    { children } = this.props
+    { children, auth, profile } = this.props
   ) {
     return (
       <NavigationDrawer autoclose
@@ -60,14 +54,12 @@ class UI extends React.Component {
           to: '/demo'
         }, {
           divider: true
-        },
-        // {
-        //   primaryText: auth ? auth.displayName : 'You are not Logged In',
-        //   secondaryText: auth ? auth.email : 'Click to sign in',
-        //   leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
-        //   onClick: auth ? this.handleLogout : this.handleLogin
-        // },
-        {
+        }, {
+          primaryText: (auth ? profile.displayName : 'You are not Logged In'),
+          secondaryText: (auth ? profile.email : 'Click to sign in'),
+          leftAvatar: (auth ? <Avatar src={profile.avatarUrl} role='presentation' /> : null),
+          onClick: (auth ? this.handleLogout : this.handleLogin)
+        }, {
           divider: true
         }]}
         drawerTitle='Navigation'
