@@ -6,6 +6,7 @@ import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import { responsiveStoreEnhancer } from 'redux-responsive'
 import { reactReduxFirebase } from 'react-redux-firebase'
 import config, { keys } from './firebase'
+import * as firebase from 'firebase'
 import { createLogger } from 'redux-logger'
 import { reducers } from './reducers.js'
 
@@ -28,11 +29,12 @@ if (process.env.NODE_ENV !== 'production' && window.devToolsExtension) {
 }
 
 //  Create the store, enhanced with responsive reducers (not available as middleware)
+firebase.initializeApp(keys) // initialize firebase instance
 const store = createStore(
   reducers,
   compose(
     responsiveStoreEnhancer,
-    reactReduxFirebase(keys, config),
+    reactReduxFirebase(firebase, config),
     middleware
   )
 )

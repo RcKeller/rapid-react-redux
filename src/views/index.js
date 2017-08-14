@@ -2,12 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  pathToJS
-} from 'react-redux-firebase'
+import { firebaseConnect } from 'react-redux-firebase'
 
 import { Link } from 'react-router'
 
@@ -21,12 +16,16 @@ import FontIcon from 'react-md/lib/FontIcons'
 import './main.scss'
 @compose(
   firebaseConnect(),
-  connect(
-    ({ firebase }) => ({
-      auth: pathToJS(firebase, 'auth'),
-      authError: pathToJS(firebase, 'authError')
-    })
-  )
+  connect(state => ({
+    auth: state.firebase.auth,
+    errors: state.firebase.errors
+  }))
+  // connect(
+  //   ({ firebase }) => ({
+  //     auth: pathToJS(firebase, 'auth'),
+  //     authError: pathToJS(firebase, 'authError')
+  //   })
+  // )
 )
 class UI extends React.Component {
   handleLogin = () => {
@@ -39,7 +38,8 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    { children, auth } = this.props
+    // { children, auth } = this.props
+    { children } = this.props
   ) {
     return (
       <NavigationDrawer autoclose
@@ -60,12 +60,14 @@ class UI extends React.Component {
           to: '/demo'
         }, {
           divider: true
-        }, {
-          primaryText: auth ? auth.displayName : 'You are not Logged In',
-          secondaryText: auth ? auth.email : 'Click to sign in',
-          leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
-          onClick: auth ? this.handleLogout : this.handleLogin
-        }, {
+        },
+        // {
+        //   primaryText: auth ? auth.displayName : 'You are not Logged In',
+        //   secondaryText: auth ? auth.email : 'Click to sign in',
+        //   leftAvatar: auth ? <Avatar src={auth.photoURL} role='presentation' /> : null,
+        //   onClick: auth ? this.handleLogout : this.handleLogin
+        // },
+        {
           divider: true
         }]}
         drawerTitle='Navigation'
