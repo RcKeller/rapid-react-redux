@@ -84,11 +84,9 @@ class UI extends React.Component {
         }
       >
         <div>{children}</div>
-        <Snackbar toasts={toasts} autohide
-          onDismiss={handleDismiss}
-        />
-        <footer>
-          <h3><em>Built by hackers, for hackers. We are Open-Source</em></h3>
+        <Snackbar toasts={toasts} autohide onDismiss={handleDismiss} />
+        <footer className='md-paper md-paper--1'>
+          <a href='https://github.com/RcKeller/rapid-react-redux'><h4>Built using Rapid-React-Redux, Open-Source on GitHub</h4></a>
         </footer>
       </NavigationDrawer>
     )
