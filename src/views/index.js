@@ -14,10 +14,9 @@ import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 import FontIcon from 'react-md/lib/FontIcons'
 import Snackbar from 'react-md/lib/Snackbars'
-const { TEMPORARY, CLIPPED } = NavigationDrawer.DrawerTypes
 
 //  Top-Level UI (Navigation, wrappers, etc)
-import './main.scss'
+// import './main.scss'
 @compose(
   firebaseConnect(),
   connect(
@@ -60,9 +59,9 @@ class UI extends React.Component {
   ) {
     return (
       <NavigationDrawer autoclose
-        mobileDrawerType={TEMPORARY}
-        tabletDrawerType={TEMPORARY}
-        desktopDrawerType={CLIPPED}
+        mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
+        tabletDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
+        desktopDrawerType={NavigationDrawer.DrawerTypes.CLIPPED}
         navItems={[{
           primaryText: 'Home',
           secondaryText: 'Main Page',

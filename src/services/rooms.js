@@ -1,9 +1,3 @@
-/*
-Recommended reading for managing your redux logic
-It can get out of hand rather easily.
-https://github.com/erikras/ducks-modular-redux
-https://medium.com/front-end-hacking/structuring-react-and-redux-applications-255361d24f84
-*/
 import { browserHistory } from 'react-router'
 /* *****
 ACTIONS

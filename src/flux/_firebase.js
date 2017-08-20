@@ -1,13 +1,12 @@
-//  API keys - replace with your own (found in the FB console) and rename to firebase.js
-export const config = {
+/* *****
+FIREBASE KEYS
+Add keys from console.firebase.com/project
+Remove the underscore and NEVER COMMIT THIS
+***** */
+const keys = {
   apiKey: '<your-api-key>',
   authDomain: '<your-auth-domain>',
   databaseURL: '<your-database-url>',
   storageBucket: '<your-storage-bucket>'
 }
-export const config = {
-  // firebase root where user profiles are stored
-  userProfile: 'users',
-  // enable/disable Firebase's database logging
-  enableLogging: false
-}
+export default keys

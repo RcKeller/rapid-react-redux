@@ -5,16 +5,19 @@ import { Provider } from 'react-redux'
 import { store, history } from './flux/store'
 //  ROUTING
 import { Router, Route, IndexRoute } from 'react-router'
+
 //  INTERFACE
 import UI from './views'
-
 //  PAGES
 import Home from './views/Home/Home'
 import NotFound from './views/NotFound/NotFound'
 import Chat from './views/Chat/Chat'
 
- // RENDER ROOT
- // Update and add new routes as necessary
+//  CORE STYLES
+import './index.scss';
+//  BACKGROUND PROCESSES
+import registerServiceWorker from './services/registerServiceWorker'
+
 ReactDOM.render(
   <Provider store={store}>
     <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
@@ -25,5 +28,6 @@ ReactDOM.render(
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('app')
+  document.getElementById('root')
 )
+registerServiceWorker()
