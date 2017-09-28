@@ -9,10 +9,10 @@ export const addRoom = user => {
     const room = { owner: user.uid, messages: [] }
     getFirebase()
       .pushWithMeta('/rooms', room)
-      //  FIXME: The API has an onComplete param, but doesn't have a standard promise interface?
-      //  We'll need to push the room ID to browserHistory...
-      .then(({key}) => {
-        dispatch({ type: 'ADD_ROOM' })
+      //  NOTE: React-Redux-Firebase docs are incomplete, but v2 will return a response object.
+      //  Here we select the key returned, then dispatch actions with it.
+      .then(({ key}) => {
+        dispatch({ type: 'ADD_ROOM', room: key })
         dispatch(addToast('Successfully created room'))
         browserHistory.push(`/chat/${key}`)
       })
@@ -30,7 +30,7 @@ export default function reducer (state = [], action) {
   switch (action.type) {
     case 'ADD_ROOM':
       // return [...state, {...action, action: 'Close'}]
-      return state
+      return [...state, action.room]
     case 'DELETE_ROOM':
       // return state.slice(1)
       return state

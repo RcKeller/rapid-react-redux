@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
-import { authenticated } from '../../services/auth'
+import { user } from '../../services/auth'
 import { addRoom } from '../../services/rooms'
 
 import Card from 'react-md/lib/Cards/Card'
@@ -11,13 +11,13 @@ import CardTitle from 'react-md/lib/Cards/CardTitle'
 import CardActions from 'react-md/lib/Cards/CardActions'
 import CardText from 'react-md/lib/Cards/CardText'
 import Media, { MediaOverlay } from 'react-md/lib/Media'
-import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 
 @compose(
   firebaseConnect(),
   connect(
-    state => ({ user: authenticated(state) && state.firebase.auth }),
+    // state => ({ user: authenticated(state) && state.firebase.auth }),
+    state => ({ user: user(state) }),
     dispatch => ({ handleAddRoom: bindActionCreators(addRoom, dispatch) })
   )
 )
@@ -35,7 +35,7 @@ class Home extends React.Component {
       <article>
         <Card className='md-grid md-cell--8'>
           <Media>
-            <img src='/img/banner.png' role='presentation' />
+            <img src='/img/banner.png' alt='' />
             <MediaOverlay>
               <CardTitle title='Welcome to Crypto Chat' subtitle='Rapid-React-Redux Demo App' />
             </MediaOverlay>

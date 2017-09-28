@@ -3,17 +3,28 @@ import PropTypes from 'prop-types'
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
-import { authenticated } from '../services/auth'
+import { authenticated, user } from '../services/auth'
 import { dismissToast } from '../services/toasts'
 
 import { Link } from 'react-router'
 
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
-import ListItem from 'react-md/lib/Lists/ListItem'
 import Avatar from 'react-md/lib/Avatars'
 import Button from 'react-md/lib/Buttons'
 import FontIcon from 'react-md/lib/FontIcons'
 import Snackbar from 'react-md/lib/Snackbars'
+
+import { createSelector } from 'reselect'
+import _ from 'lodash'
+
+const getFirebase = state => state.firebase
+const getAuth = firebase => firebase.auth
+
+const test = createSelector(
+  [getFirebase, getAuth],
+  auth => auth.isLoaded
+)
+
 
 //  Top-Level UI (Navigation, wrappers, etc)
 // import './main.scss'
@@ -21,7 +32,12 @@ import Snackbar from 'react-md/lib/Snackbars'
   firebaseConnect(),
   connect(
     state => ({
-      user:  authenticated(state) && state.firebase.auth,
+      test: test(state),
+      authenticated: authenticated(state),
+      // user:  authenticated(state) && state.firebase.auth,
+
+      // user: user(state),
+      user: state.firebase ? state.firebase.auth : {},
       errors: state.firebase.errors,
       toasts: state.toasts
     }),
@@ -55,8 +71,9 @@ class UI extends React.Component {
     router.push('/')
   }
   render (
-    { children, user, toasts, handleDismiss } = this.props
+    { children, authenticated, user, toasts, handleDismiss } = this.props
   ) {
+    console.warn('USER', authenticated, user)
     return (
       <NavigationDrawer autoclose
         mobileDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
