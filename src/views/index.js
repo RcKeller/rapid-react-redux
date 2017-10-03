@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
-import { authenticated, user } from '../services/auth'
+import { getAuth, authenticating, authenticated, unauthenticated, user, errors } from '../services/auth'
 import { dismissToast } from '../services/toasts'
 
 import { Link } from 'react-router'
@@ -17,29 +17,23 @@ import Snackbar from 'react-md/lib/Snackbars'
 import { createSelector } from 'reselect'
 import _ from 'lodash'
 
-const getFirebase = state => state.firebase
-const getAuth = firebase => firebase.auth
-
-const test = createSelector(
-  [getFirebase, getAuth],
-  auth => auth.isLoaded
-)
-
-
 //  Top-Level UI (Navigation, wrappers, etc)
 // import './main.scss'
 @compose(
   firebaseConnect(),
   connect(
     state => ({
-      test: test(state),
+      getAuth: getAuth(state),
+      authenticating: authenticating(state),
       authenticated: authenticated(state),
-      // user:  authenticated(state) && state.firebase.auth,
-
-      // user: user(state),
-      user: state.firebase ? state.firebase.auth : {},
-      errors: state.firebase.errors,
+      unauthenticated: unauthenticated(state),
+      user: user(state),
+      errors: errors(state),
       toasts: state.toasts
+      // authenticated: authenticated(state),
+      // user: user(state),
+      // errors: errors(state),
+      // toasts: state.toasts
     }),
     dispatch => ({ handleDismiss: bindActionCreators(dismissToast, dispatch) })
   )

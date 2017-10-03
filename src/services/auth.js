@@ -12,19 +12,21 @@ import _ from 'lodash'
 SELECTORS
 ***** */
  // User loaded and data exists
-// export const authenticated = (state) => state.firebase.auth.isLoaded && !state.firebase.auth.isEmpty
 const getFirebase = state => state.firebase
-const getAuth = firebase => firebase.auth
-
-const test = createSelector(
-  [getFirebase, getAuth],
-  auth => auth.isLoaded
+export const getAuth = createSelector(
+  [getFirebase],
+  firebase => firebase.auth
 )
+
+export const errors = createSelector(
+  [getFirebase],
+  firebase => firebase.errors
+)
+
 export const authenticated = createSelector(
-  [getFirebase, getAuth],
+  [getAuth],
   auth => auth.isLoaded && !auth.isEmpty
 )
-
 
 // const firebaseInitialized = state => state.firebase
 // const authInitialized = firebase => firebase.auth
@@ -37,9 +39,25 @@ export const authenticated = createSelector(
   // auth => auth.isLoaded && !auth.isEmpty
 
 //  Firebase is initializing or auth hasn't loaded.
-export const authenticating = (state) => state.firebase.isInitializing || !state.firebase.auth.isLoaded
-export const unauthenticated = (state) => !state.firebase.auth.isLoaded || state.firebase.auth.isEmpty
-export const user = (state) => authenticated(state) && state.firebase.auth
+export const authenticating = createSelector(
+  [getFirebase],
+  firebase => firebase.isInitializing || !firebase.auth.isLoaded
+)
+export const unauthenticated = createSelector(
+  [getAuth],
+  auth => auth.isEmpty || !auth.isLoaded
+)
+export const user = createSelector(
+  [getFirebase],
+  firebase => Array.isArray(firebase.profile.providerData)
+    ? firebase.profile.providerData[0]
+    : firebase.profile.providerData
+)
+// export const user = (state) => authenticated(state) ? state.firebase.profile.providerData : {}
+  // export const authenticating = (state) => state.firebase.isInitializing || !state.firebase.auth.isLoaded
+  // export const unauthenticated = (state) => state.firebase.auth.isEmpty || !state.firebase.auth.isLoaded
+  // export const user = (state) => authenticated(state) ? state.firebase.profile.providerData : {}
+// export const user = (state) => authenticated(state) && state.firebase.auth
 
 //  User loaded and data exists
 // export const authenticated = (state) => state.firebase.auth.isLoaded && !state.firebase.auth.isEmpty
