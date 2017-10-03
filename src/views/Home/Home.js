@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
-import { user } from '../../services/auth'
+import { user } from '../../flux/selectors'
 import { addRoom } from '../../services/rooms'
 
 import Card from 'react-md/lib/Cards/Card'
@@ -28,9 +28,7 @@ class Home extends React.Component {
     }),
     handleAddRoom: PropTypes.func.isRequired
   }
-  render (
-    { user, handleAddRoom } = this.props
-  ) {
+  render ({ user, handleAddRoom } = this.props) {
     return (
       <article>
         <Card className='md-grid md-cell--8'>

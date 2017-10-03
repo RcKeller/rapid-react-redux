@@ -20,7 +20,7 @@ import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'
 import { reducers } from './reducers.js'
 
 //  Initialize Firebase w/ API keys (Yes, these imports are on purpose)
-import keys from './firebase'
+import { keys, config } from './firebase'
 import * as firebase from 'firebase'
 firebase.initializeApp(keys)
 
@@ -44,10 +44,7 @@ export const store = createStore(
   reducers,
   compose(
     responsiveStoreEnhancer,
-    reactReduxFirebase(firebase, {
-      userProfile: 'users',
-      enableLogging: false
-    }),
+    reactReduxFirebase(firebase, config),
     middleware
   )
 )

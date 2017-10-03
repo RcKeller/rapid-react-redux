@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { compose, bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect } from 'react-redux-firebase'
-import { getAuth, authenticating, authenticated, unauthenticated, user, errors } from '../services/auth'
+import { authenticating, authenticated, unauthenticated } from '../services/auth'
+import { user, errors } from '../flux/selectors'
 import { dismissToast } from '../services/toasts'
 
 import { Link } from 'react-router'
@@ -23,7 +24,6 @@ import _ from 'lodash'
   firebaseConnect(),
   connect(
     state => ({
-      getAuth: getAuth(state),
       authenticating: authenticating(state),
       authenticated: authenticated(state),
       unauthenticated: unauthenticated(state),
@@ -74,6 +74,13 @@ class UI extends React.Component {
         tabletDrawerType={NavigationDrawer.DrawerTypes.TEMPORARY}
         desktopDrawerType={NavigationDrawer.DrawerTypes.CLIPPED}
         navItems={[{
+          primaryText: user ? user.displayName : 'You are not Logged In',
+          secondaryText: user ? user.email : 'Click to sign in',
+          leftAvatar: user ? <Avatar src={user.photoURL} role='presentation' /> : null,
+          onClick: user ? this.handleLogout : this.handleLogin
+        }, {
+          divider: true
+        }, {
           primaryText: 'Home',
           secondaryText: 'Main Page',
           leftIcon: <FontIcon>home</FontIcon>,
@@ -85,13 +92,6 @@ class UI extends React.Component {
           leftIcon: <FontIcon>school</FontIcon>,
           component: Link,
           to: '/demo'
-        }, {
-          divider: true
-        },{
-          primaryText: user ? user.displayName : 'You are not Logged In',
-          secondaryText: user ? user.email : 'Click to sign in',
-          leftAvatar: user ? <Avatar src={user.photoURL} role='presentation' /> : null,
-          onClick: user ? this.handleLogout : this.handleLogin
         }, {
           divider: true
         }]}
